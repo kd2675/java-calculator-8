@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Application {
-    private static final String[] DEFAULT_DELIMITERS = {",", ":"};
+    private static final List<String> DEFAULT_DELIMITERS = List.of(",", ":");
 
     public static void main(String[] args) {
         // TODO: 프로그램 구현
@@ -21,7 +21,16 @@ public class Application {
 
         List<Integer> result = new ArrayList<>();
 
-        String splitRegex = Arrays.stream(DEFAULT_DELIMITERS).collect(Collectors.joining("|"));
+        List<String> delimiter = new ArrayList<>(DEFAULT_DELIMITERS);
+
+        if (input.startsWith("//")) {
+            int nl = input.indexOf("\\n");
+            delimiter.add(input.substring(2, nl));
+
+            input = input.substring(nl + 2);
+        }
+
+        String splitRegex = String.join("|", delimiter);
         String[] tokens = input.split(splitRegex, 0);
         for (String token : tokens) {
             String s = token.trim();
