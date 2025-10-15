@@ -25,6 +25,10 @@ public class Application {
 
         if (input.startsWith("//")) {
             int nl = input.indexOf("\\n");
+            if (nl < 0) {
+                throw new IllegalArgumentException("input custom delimiter 형식이 올바르지 않습니다.");
+            }
+
             delimiter.add(input.substring(2, nl));
 
             input = input.substring(nl + 2);
@@ -38,7 +42,15 @@ public class Application {
                 continue;
             }
 
-            result.add(Integer.parseInt(s));
+            try {
+                result.add(Integer.parseInt(s));
+            } catch (NumberFormatException e) {
+                throw new IllegalArgumentException("숫자가 아닌 값 : " + s);
+            }
+
+            if (Integer.parseInt(s) < 0) {
+                throw new IllegalArgumentException("음수는 허용되지 않습니다.");
+            }
         }
 
         int acc = 0;
