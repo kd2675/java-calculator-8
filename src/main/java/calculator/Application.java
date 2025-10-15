@@ -9,17 +9,24 @@ import calculator.utils.IOUtils;
 public class Application {
     public static void main(String[] args) {
         // TODO: 프로그램 구현
-        String input = IOUtils.readLine();
+        //I/O 분리: 입력 안내, 결과 출력 형식 맞추기
+        try {
+            String input = IOUtils.readLine();
 
-        AddCalculator calculator = new AddCalculator(
-                new DelimiterParserImpl(),
-                new NumberParserImpl(),
-                new ParsingValidatorImpl(),
-                new SumServiceImpl()
-        );
+            AddCalculator calculator = new AddCalculator(
+                    new DelimiterParserImpl(),
+                    new NumberParserImpl(),
+                    new ParsingValidatorImpl(),
+                    new SumServiceImpl()
+            );
 
-        int result = calculator.add(input);
+            int result = calculator.add(input);
 
-        IOUtils.printResult(result);
+            //I/O 분리: 입력 안내, 결과 출력 형식 맞추기
+            IOUtils.printResult(result);
+        } catch (IllegalArgumentException e) {
+            System.out.println(e.getMessage());
+            return;
+        }
     }
 }
