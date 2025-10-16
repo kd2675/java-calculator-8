@@ -2,40 +2,55 @@ package calculator.biz.parse;
 
 public class DelimiterParserImpl implements DelimiterParser {
     private static final String[] DEFAULT_DELIMITERS = {",", ":"};
+    private static final String CUSTOM_DELIMITER_PREFIX = "//";
+    private static final String CUSTOM_DELIMITER_SUFFIX = "\\n";
+    private static final int PREFIX_LENGTH = 2;
+    private static final int SUFFIX_LENGTH = 2;
 
     @Override
     public String[] parseDelimiters(String input) {
-        if (input == null) {
-            throw new IllegalArgumentException("parseDelimiters input is null");
-        }
+        validateInput(input, "parseDelimiters");
 
-        if (!input.startsWith("//")) {
+        if (!hasCustomDelimiter(input)) {
             return DEFAULT_DELIMITERS;
         }
 
-        int nl = input.indexOf("\\n");
-        if (nl < 0) {
-            throw new IllegalArgumentException("input custom delimiter 형식이 올바르지 않습니다.");
-        }
-
-        return new String[] { input.substring(2, nl), ",", ":" };
+        String customDelimiter = extractCustomDelimiter(input);
+        return new String[] { customDelimiter, ",", ":" };
     }
 
     @Override
     public String extractBody(String input) {
-        if (input == null) {
-            throw new IllegalArgumentException("extractBody input is null");
-        }
+        validateInput(input, "extractBody");
 
-        if (!input.startsWith("//")) {
+        if (!hasCustomDelimiter(input)) {
             return input;
         }
 
-        int nl = input.indexOf("\\n");
-        if (nl < 0) {
-            throw new IllegalArgumentException("커스텀 구분자 형식 오류");
-        }
+        int delimiterEndIndex = getDelimiterEndIndex(input);
+        return input.substring(delimiterEndIndex + SUFFIX_LENGTH);
+    }
 
-        return input.substring(nl + 2);
+    private void validateInput(String input, String methodName) {
+        if (input == null) {
+            throw new IllegalArgumentException(methodName + " input is null");
+        }
+    }
+
+    private boolean hasCustomDelimiter(String input) {
+        return input.startsWith(CUSTOM_DELIMITER_PREFIX);
+    }
+
+    private String extractCustomDelimiter(String input) {
+        int delimiterEndIndex = getDelimiterEndIndex(input);
+        return input.substring(PREFIX_LENGTH, delimiterEndIndex);
+    }
+
+    private int getDelimiterEndIndex(String input) {
+        int index = input.indexOf(CUSTOM_DELIMITER_SUFFIX);
+        if (index < 0) {
+            throw new IllegalArgumentException("커스텀 구분자 형식이 올바르지 않습니다. (//구분자\\n 형식이어야 합니다)");
+        }
+        return index;
     }
 }

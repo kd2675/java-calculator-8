@@ -14,7 +14,7 @@ public class Application {
             String input = IOUtils.readLine();
 
             AddCalculator calculator = new AddCalculator(
-                    new DelimiterParserImpl(),
+                    new DelimiterParserPattern(),
                     new NumberParserImpl(),
                     new ParsingValidatorImpl(),
                     new SumServiceImpl()
