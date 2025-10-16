@@ -16,7 +16,14 @@ public class DelimiterParserPattern implements DelimiterParser {
         Matcher m = CUSTOM_PATTERN.matcher(input);
         if (m.matches()) {
             String custom = m.group(1);
+            if (custom.isEmpty()) {
+                throw new IllegalArgumentException("커스텀 구분자가 비어있습니다.");
+            }
             return new String[] { custom, ",", ":" };
+        }
+
+        if (input.startsWith("//")) {
+            throw new IllegalArgumentException("커스텀 구분자 형식이 올바르지 않습니다. (//구분자\\n본문)");
         }
 
         return DEFAULT_DELIMITERS;
@@ -30,7 +37,15 @@ public class DelimiterParserPattern implements DelimiterParser {
 
         Matcher m = CUSTOM_PATTERN.matcher(input);
         if (m.matches()) {
-            return m.group(2);
+            String body = m.group(2);
+            if (body == null || body.isEmpty()) {
+                throw new IllegalArgumentException("본문이 비어있습니다.");
+            }
+            return body;
+        }
+
+        if (input.startsWith("//")) {
+            throw new IllegalArgumentException("커스텀 구분자 형식이 올바르지 않습니다. (//구분자\\n본문)");
         }
 
         return input;

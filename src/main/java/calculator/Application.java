@@ -24,7 +24,7 @@ public class Application {
             IOUtils.printResult((int) result);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
-            return;
+            throw new IllegalArgumentException();
         }
     }
 }
