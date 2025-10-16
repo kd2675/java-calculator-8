@@ -11,5 +11,5 @@ public interface ParsingValidator {
      * @작성자 : 김도영
      * @변경이력 :
      **********************************************************************************************/
-    void validate(List<Integer> input);
+    void validate(List<Long> input);
 }

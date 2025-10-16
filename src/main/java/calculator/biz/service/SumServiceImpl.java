@@ -4,9 +4,9 @@ import java.util.List;
 
 public class SumServiceImpl implements SumService{
     @Override
-    public int sum(List<Integer> numbers) {
-        int acc = 0;
-        for (int n : numbers) {
+    public long sum(List<Long> numbers) {
+        long acc = 0;
+        for (long n : numbers) {
             acc += n;
         }
 

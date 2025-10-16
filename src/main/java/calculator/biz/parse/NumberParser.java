@@ -9,5 +9,5 @@ public interface NumberParser {
      * @작성자 : 김도영
      * @변경이력 :
      **********************************************************************************************/
-    List<Integer> parseNumbers(String body, String[] delimiters);
+    List<Long> parseNumbers(String body, String[] delimiters);
 }

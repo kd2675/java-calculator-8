@@ -8,12 +8,12 @@ import java.util.stream.Collectors;
 
 public class NumberParserImpl implements NumberParser {
     @Override
-    public List<Integer> parseNumbers(String body, String[] delimiters) {
+    public List<Long> parseNumbers(String body, String[] delimiters) {
         if (body == null || body.isEmpty()) {
             return Collections.emptyList();
         }
 
-        List<Integer> result = new ArrayList<>();
+        List<Long> result = new ArrayList<>();
 
         String splitRegex = Arrays.stream(delimiters).collect(Collectors.joining("|"));
         String[] tokens = body.split(splitRegex, 0);
@@ -24,7 +24,7 @@ public class NumberParserImpl implements NumberParser {
             }
 
             try {
-                result.add(Integer.parseInt(s));
+                result.add(Long.parseLong(s));
             } catch (NumberFormatException e) {
                 throw new IllegalArgumentException("숫자가 아닌 값 : " + s);
             }

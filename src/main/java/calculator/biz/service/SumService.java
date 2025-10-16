@@ -9,5 +9,5 @@ public interface SumService {
      * @작성자 : 김도영
      * @변경이력 :
      **/
-    int sum(List<Integer> numbers);
+    long sum(List<Long> numbers);
 }

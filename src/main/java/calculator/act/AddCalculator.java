@@ -23,7 +23,7 @@ public class AddCalculator {
         this.sumService = sumService;
     }
 
-    public int add(String input) {
+    public long add(String input) {
         //빈 문자열 입력 시 0 반환
         if (input == null || input.isEmpty()) {
             return 0;
@@ -31,11 +31,11 @@ public class AddCalculator {
 
         String[] delimiters = delimiterParser.parseDelimiters(input);
         String body = delimiterParser.extractBody(input);
-        List<Integer> numbers = numberParser.parseNumbers(body, delimiters);
+        List<Long> numbers = numberParser.parseNumbers(body, delimiters);
 
         parsingValidator.validate(numbers);
 
-        int result = sumService.sum(numbers);
+        long result = sumService.sum(numbers);
 
         return result;
     }
