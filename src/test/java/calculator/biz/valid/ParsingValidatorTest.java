@@ -48,14 +48,67 @@ class ParsingValidatorTest {
 
     @ParameterizedTest
     @MethodSource("validatorProvider")
-    @DisplayName("빈 리스트는 검증을 통과한다")
+    @DisplayName("빈 리스트는 검증을 실패한다")
     void validate_emptyList(ParsingValidator validator) {
         // given
         List<Long> numbers = Collections.emptyList();
 
         // when & then
-        assertThatCode(() -> validator.validate(numbers))
-                .doesNotThrowAnyException();
+        assertThatThrownBy(() -> validator.validate(numbers))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("비어있을 수 없습니다");
+    }
+
+    @ParameterizedTest
+    @MethodSource("validatorProvider")
+    @DisplayName("null 리스트는 검증을 실패한다")
+    void validate_nullList(ParsingValidator validator) {
+        // given
+        List<Long> numbers = null;
+
+        // when & then
+        assertThatThrownBy(() -> validator.validate(numbers))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("null일 수 없습니다");
+    }
+
+    @ParameterizedTest
+    @MethodSource("validatorProvider")
+    @DisplayName("리스트 내 null 요소가 있으면 검증을 실패한다")
+    void validate_nullElement(ParsingValidator validator) {
+        // given
+        List<Long> numbers = Arrays.asList(1L, null, 3L);
+
+        // when & then
+        assertThatThrownBy(() -> validator.validate(numbers))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("null일 수 없습니다");
+    }
+
+    @ParameterizedTest
+    @MethodSource("validatorProvider")
+    @DisplayName("첫 번째 요소가 null이면 검증을 실패한다")
+    void validate_firstNull(ParsingValidator validator) {
+        // given
+        List<Long> numbers = Arrays.asList(null, 2L, 3L);
+
+        // when & then
+        assertThatThrownBy(() -> validator.validate(numbers))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("인덱스 0");
+    }
+
+    @ParameterizedTest
+    @MethodSource("validatorProvider")
+    @DisplayName("마지막 요소가 null이면 검증을 실패한다")
+    void validate_lastNull(ParsingValidator validator) {
+        // given
+        List<Long> numbers = Arrays.asList(1L, 2L, null);
+
+        // when & then
+        assertThatThrownBy(() -> validator.validate(numbers))
+                .isInstanceOf(IllegalArgumentException.class)
+                .hasMessageContaining("인덱스 2");
     }
 
     @ParameterizedTest
