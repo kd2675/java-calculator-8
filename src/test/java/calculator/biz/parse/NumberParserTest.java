@@ -210,4 +210,109 @@ class NumberParserTest {
         // then
         assertThat(numbers).containsExactly(10000000000L, 20000000000L, 30000000000L);
     }
+
+    @ParameterizedTest
+    @MethodSource("numberParserProvider")
+    @DisplayName("점(.) 구분자로 숫자를 파싱한다")
+    void parseNumbers_dotDelimiter(NumberParser parser) {
+        // given
+        String body = "1.2.3";
+        String[] delimiters = {"\\Q.\\E"};  // Pattern.quote(".")
+
+        // when
+        List<Long> numbers = parser.parseNumbers(body, delimiters);
+
+        // then
+        assertThat(numbers).containsExactly(1L, 2L, 3L);
+    }
+
+    @ParameterizedTest
+    @MethodSource("numberParserProvider")
+    @DisplayName("파이프(|) 구분자로 숫자를 파싱한다")
+    void parseNumbers_pipeDelimiter(NumberParser parser) {
+        // given
+        String body = "1|2|3";
+        String[] delimiters = {"\\Q|\\E"};  // Pattern.quote("|")
+
+        // when
+        List<Long> numbers = parser.parseNumbers(body, delimiters);
+
+        // then
+        assertThat(numbers).containsExactly(1L, 2L, 3L);
+    }
+
+    @ParameterizedTest
+    @MethodSource("numberParserProvider")
+    @DisplayName("별표(*) 구분자로 숫자를 파싱한다")
+    void parseNumbers_asteriskDelimiter(NumberParser parser) {
+        // given
+        String body = "10*20*30";
+        String[] delimiters = {"\\Q*\\E"};  // Pattern.quote("*")
+
+        // when
+        List<Long> numbers = parser.parseNumbers(body, delimiters);
+
+        // then
+        assertThat(numbers).containsExactly(10L, 20L, 30L);
+    }
+
+    @ParameterizedTest
+    @MethodSource("numberParserProvider")
+    @DisplayName("물음표(?) 구분자로 숫자를 파싱한다")
+    void parseNumbers_questionMarkDelimiter(NumberParser parser) {
+        // given
+        String body = "5?10?15";
+        String[] delimiters = {"\\Q?\\E"};  // Pattern.quote("?")
+
+        // when
+        List<Long> numbers = parser.parseNumbers(body, delimiters);
+
+        // then
+        assertThat(numbers).containsExactly(5L, 10L, 15L);
+    }
+
+    @ParameterizedTest
+    @MethodSource("numberParserProvider")
+    @DisplayName("플러스(+) 구분자로 숫자를 파싱한다")
+    void parseNumbers_plusDelimiter(NumberParser parser) {
+        // given
+        String body = "100+200+300";
+        String[] delimiters = {"\\Q+\\E"};  // Pattern.quote("+")
+
+        // when
+        List<Long> numbers = parser.parseNumbers(body, delimiters);
+
+        // then
+        assertThat(numbers).containsExactly(100L, 200L, 300L);
+    }
+
+    @ParameterizedTest
+    @MethodSource("numberParserProvider")
+    @DisplayName("대괄호([) 구분자로 숫자를 파싱한다")
+    void parseNumbers_bracketDelimiter(NumberParser parser) {
+        // given
+        String body = "1[2[3";
+        String[] delimiters = {"\\Q[\\E"};  // Pattern.quote("[")
+
+        // when
+        List<Long> numbers = parser.parseNumbers(body, delimiters);
+
+        // then
+        assertThat(numbers).containsExactly(1L, 2L, 3L);
+    }
+
+    @ParameterizedTest
+    @MethodSource("numberParserProvider")
+    @DisplayName("여러 특수문자 구분자를 혼합하여 파싱한다")
+    void parseNumbers_mixedSpecialDelimiters(NumberParser parser) {
+        // given
+        String body = "1.2|3*4";
+        String[] delimiters = {"\\Q.\\E", "\\Q|\\E", "\\Q*\\E"};
+
+        // when
+        List<Long> numbers = parser.parseNumbers(body, delimiters);
+
+        // then
+        assertThat(numbers).containsExactly(1L, 2L, 3L, 4L);
+    }
 }

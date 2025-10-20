@@ -15,7 +15,10 @@ public class NumberParserImpl implements NumberParser {
 
         List<Long> result = new ArrayList<>();
 
-        String splitRegex = Arrays.stream(delimiters).collect(Collectors.joining("|"));
+        String splitRegex = Arrays.stream(delimiters)
+                .map(delimiter -> "(" + delimiter + ")")
+                .collect(Collectors.joining("|"));
+
         String[] tokens = body.split(splitRegex, 0);
         for (String token : tokens) {
             String s = token.trim();

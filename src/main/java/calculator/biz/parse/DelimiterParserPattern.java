@@ -19,7 +19,9 @@ public class DelimiterParserPattern implements DelimiterParser {
             if (custom.isEmpty()) {
                 throw new IllegalArgumentException("커스텀 구분자가 비어있습니다.");
             }
-            return new String[] { custom, ",", ":" };
+            // 정규식 특수문자를 이스케이프 처리
+            String escapedCustom = Pattern.quote(custom);
+            return new String[] { escapedCustom, ",", ":" };
         }
 
         if (input.startsWith("//")) {

@@ -7,21 +7,10 @@ import calculator.biz.valid.ParsingValidator;
 
 import java.util.List;
 
-public class AddCalculator {
-    private final DelimiterParser delimiterParser;
-    private final NumberParser numberParser;
-    private final ParsingValidator parsingValidator;
-    private final SumService sumService;
-
-    public AddCalculator(DelimiterParser delimiterParser,
-                         NumberParser numberParser,
-                         ParsingValidator parsingValidator,
-                         SumService sumService) {
-        this.delimiterParser = delimiterParser;
-        this.numberParser = numberParser;
-        this.parsingValidator = parsingValidator;
-        this.sumService = sumService;
-    }
+public record AddCalculator(DelimiterParser delimiterParser,
+                            NumberParser numberParser,
+                            ParsingValidator parsingValidator,
+                            SumService sumService) {
 
     public long add(String input) {
         //빈 문자열 입력 시 0 반환

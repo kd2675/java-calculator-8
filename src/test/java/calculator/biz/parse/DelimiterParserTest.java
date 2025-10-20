@@ -74,7 +74,7 @@ class DelimiterParserTest {
         String[] delimiters = parser.parseDelimiters(input);
 
         // then
-        assertThat(delimiters).contains(";");
+        assertThat(delimiters).anyMatch(d -> d.contains(";"));
         assertThat(delimiters).contains(",", ":");
     }
 
@@ -102,5 +102,117 @@ class DelimiterParserTest {
         // when & then
         assertThatThrownBy(() -> parser.parseDelimiters(input))
                 .isInstanceOf(IllegalArgumentException.class);
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("점(.) 구분자를 파싱한다")
+    void parseDelimiters_dotDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//.\\n1.2.3";
+
+        // when
+        String[] delimiters = parser.parseDelimiters(input);
+
+        // then
+        assertThat(delimiters).anyMatch(d -> d.contains("."));
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("점(.) 구분자에서 본문을 추출한다")
+    void extractBody_dotDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//.\\n1.2.3";
+
+        // when
+        String body = parser.extractBody(input);
+
+        // then
+        assertThat(body).isEqualTo("1.2.3");
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("파이프(|) 구분자를 파싱한다")
+    void parseDelimiters_pipeDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//|\\n1|2|3";
+
+        // when
+        String[] delimiters = parser.parseDelimiters(input);
+
+        // then
+        assertThat(delimiters).anyMatch(d -> d.contains("|"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("별표(*) 구분자를 파싱한다")
+    void parseDelimiters_asteriskDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//*\\n1*2*3";
+
+        // when
+        String[] delimiters = parser.parseDelimiters(input);
+
+        // then
+        assertThat(delimiters).anyMatch(d -> d.contains("*"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("물음표(?) 구분자를 파싱한다")
+    void parseDelimiters_questionMarkDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//?\\n1?2?3";
+
+        // when
+        String[] delimiters = parser.parseDelimiters(input);
+
+        // then
+        assertThat(delimiters).anyMatch(d -> d.contains("?"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("플러스(+) 구분자를 파싱한다")
+    void parseDelimiters_plusDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//+\\n1+2+3";
+
+        // when
+        String[] delimiters = parser.parseDelimiters(input);
+
+        // then
+        assertThat(delimiters).anyMatch(d -> d.contains("+"));
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("대괄호([) 구분자를 파싱한다")
+    void parseDelimiters_bracketDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//[\\n1[2[3";
+
+        // when
+        String[] delimiters = parser.parseDelimiters(input);
+
+        // then
+        assertThat(delimiters).anyMatch(d -> d.contains("["));
+    }
+
+    @ParameterizedTest
+    @MethodSource("delimiterParserProvider")
+    @DisplayName("백슬래시(\\) 구분자를 파싱한다")
+    void parseDelimiters_backslashDelimiter(DelimiterParser parser) {
+        // given
+        String input = "//\\\\n1\\2\\3";
+
+        // when
+        String[] delimiters = parser.parseDelimiters(input);
+
+        // then
+        assertThat(delimiters).anyMatch(d -> d.contains("\\"));
     }
 }

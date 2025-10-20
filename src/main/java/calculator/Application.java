@@ -21,7 +21,7 @@ public class Application {
 
             long result = calculator.add(input);
 
-            IOUtils.printResult((int) result);
+            IOUtils.printResult(result);
         } catch (IllegalArgumentException e) {
             System.out.println(e.getMessage());
             throw new IllegalArgumentException();

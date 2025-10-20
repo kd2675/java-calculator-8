@@ -1,5 +1,7 @@
 package calculator.biz.parse;
 
+import java.util.regex.Pattern;
+
 public class DelimiterParserImpl implements DelimiterParser {
     private static final String[] DEFAULT_DELIMITERS = {",", ":"};
     private static final String CUSTOM_DELIMITER_PREFIX = "//";
@@ -16,7 +18,8 @@ public class DelimiterParserImpl implements DelimiterParser {
         }
 
         String customDelimiter = extractCustomDelimiter(input);
-        return new String[] { customDelimiter, ",", ":" };
+        String escapedCustom = Pattern.quote(customDelimiter);
+        return new String[] { escapedCustom, ",", ":" };
     }
 
     @Override
